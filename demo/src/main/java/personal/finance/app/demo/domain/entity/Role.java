@@ -1,8 +1,8 @@
 package personal.finance.app.demo.domain.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +12,7 @@ import javax.persistence.Id;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Role {
 
     @Id
@@ -20,4 +21,7 @@ public class Role {
 
     private String name;
 
+    public Role(String name) {
+        this.name = name;
+    }
 }
