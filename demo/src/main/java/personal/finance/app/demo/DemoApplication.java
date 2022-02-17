@@ -19,7 +19,7 @@ public class DemoApplication {
 	@Autowired
 	public CommandLineRunner setupApp(RoleRepository roleRepository) {
 		return args -> {
-			roleRepository.save(new Role("customer"));
+			roleRepository.save(new Role("user"));
 		};
 	}
 

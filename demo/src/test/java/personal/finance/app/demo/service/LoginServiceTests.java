@@ -13,7 +13,9 @@ import personal.finance.app.demo.domain.entity.Role;
 import personal.finance.app.demo.domain.entity.User;
 import personal.finance.app.demo.repository.RoleRepository;
 import personal.finance.app.demo.repository.UserRepository;
+import personal.finance.app.demo.repository.VerificationTokenRepository;
 import personal.finance.app.demo.service.exception.RoleNotFoundException;
+import personal.finance.app.demo.service.imp.EmailServiceImp;
 import personal.finance.app.demo.service.imp.LoginServiceImp;
 
 import java.util.Optional;
@@ -30,31 +32,37 @@ public class LoginServiceTests {
     private UserRepository userRepository;
     @Mock
     private RoleRepository roleRepository;
+    @Mock
+    private VerificationTokenRepository verificationTokenRepository;
+    @Mock
+    private EmailServiceImp emailService;
 
     private LoginServiceImp loginService;
 
     @BeforeEach
     void setup() {
         this.loginService = new LoginServiceImp(userRepository,
-                passwordEncoder, roleRepository);
+                passwordEncoder, roleRepository,
+                verificationTokenRepository,
+                emailService);
     }
 
     @Nested
-    class RegisterUserTests {
+    class AddUserTests {
 
         @Test
-        void should_ReturnRegisteredUser_When_RegisterUser() {
+        void should_ReturnAddedUser_When_AddUser() {
             // given
             when(LoginServiceTests.this.roleRepository.findByName(anyString()))
                     .thenReturn(Optional.of(new Role(1L, "user")));
             User userToRegister = User.builder().username("testUsername")
                     .password("testPassword").email("test@gmail.com").build();
             // when
-            User registeredUser = loginService.registerUser(userToRegister);
+            User registeredUser = loginService.addUser(userToRegister);
             // then
             verify(roleRepository, times(1)).findByName(anyString());
             assertAll(
-                    () -> assertEquals("user", registeredUser.getUsername()),
+                    () -> assertEquals("testUsername", registeredUser.getUsername()),
                     () -> assertTrue(passwordEncoder
                             .matches("testPassword", registeredUser.getPassword())),
                     () -> assertEquals("test@gmail.com", registeredUser.getEmail()),
@@ -72,7 +80,7 @@ public class LoginServiceTests {
             User userToRegister = User.builder().username("testUsername")
                     .password("testPassword").email("test@gmail.com").build();
             // when
-            Executable executable = () -> loginService.registerUser(userToRegister);
+            Executable executable = () -> loginService.addUser(userToRegister);
             // then
             assertThrows(RoleNotFoundException.class, executable);
         }
