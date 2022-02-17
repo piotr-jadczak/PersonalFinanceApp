@@ -1,5 +1,6 @@
 package personal.finance.app.demo.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,13 +26,19 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Size(min = 4, max = 16, message = "username length must be between 4-16")
+    @Size(min = 4, max = 16)
+    @Column(unique = true)
     private String username;
-    @Size(min = 4, max = 60, message = "password length must be between 4-60")
+
+    @Size(min = 8, max = 60)
+    @JsonIgnore
     private String password;
+
     @Email
-    @Size(max = 64, message = "email length must be less or equal 64")
+    @Size(max = 64)
+    @Column(unique = true)
     private String email;
+
     private boolean accountNonLocked;
     private boolean enabled;
 
@@ -39,6 +46,7 @@ public class User implements UserDetails {
     private Role role;
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.getName()));
     }
@@ -62,11 +70,13 @@ public class User implements UserDetails {
     public boolean isAccountNonLocked() {return accountNonLocked; }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }

@@ -3,6 +3,7 @@ package personal.finance.app.demo.service.imp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import personal.finance.app.demo.domain.dto.UserDto;
 import personal.finance.app.demo.domain.entity.Role;
 import personal.finance.app.demo.domain.entity.User;
 import personal.finance.app.demo.repository.RoleRepository;
@@ -36,10 +37,18 @@ public class LoginServiceImp implements LoginService {
         userToRegister.setAccountNonLocked(true);
         userToRegister.setPassword(passwordEncoder
                 .encode(userToRegister.getPassword()));
-        Role userRole = roleRepository.findByName("user")
+        Role userRole = roleRepository.findByName("customer")
                 .orElseThrow(RoleNotFoundException::new);
         userToRegister.setRole(userRole);
 
         return userRepository.save(userToRegister);
     }
+
+    @Override
+    public User mapUser(UserDto userDto) {
+        return User.builder().username(userDto.getUsername())
+                .password(userDto.getPassword())
+                .email(userDto.getEmail()).build();
+    }
+
 }

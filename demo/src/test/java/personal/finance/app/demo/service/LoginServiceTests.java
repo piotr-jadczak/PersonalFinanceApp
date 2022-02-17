@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import personal.finance.app.demo.domain.dto.UserDto;
 import personal.finance.app.demo.domain.entity.Role;
 import personal.finance.app.demo.domain.entity.User;
 import personal.finance.app.demo.repository.RoleRepository;
@@ -74,6 +75,28 @@ public class LoginServiceTests {
             Executable executable = () -> loginService.registerUser(userToRegister);
             // then
             assertThrows(RoleNotFoundException.class, executable);
+        }
+    }
+
+    @Nested
+    class MapUserTests {
+
+        @Test
+        void should_ReturnUser_When_UserDtoCorrect() {
+            // given
+            String expUsername = "testUser";
+            String expPassword = "testPassword";
+            String expEmail = "testEmail@test.com";
+            UserDto testUserDto = new UserDto(expUsername,
+                    expPassword, expEmail);
+            // when
+            User mappedUser = loginService.mapUser(testUserDto);
+            // then
+            assertAll(
+                    () -> assertEquals(expUsername, mappedUser.getUsername()),
+                    () -> assertEquals(expPassword, mappedUser.getPassword()),
+                    () -> assertEquals(expEmail, mappedUser.getEmail())
+            );
         }
     }
 
