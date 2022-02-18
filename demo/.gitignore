@@ -37,4 +37,4 @@ out/
 .vscode/
 
 ### ignore application.properties for security reasons
-**/resource/**/*.properties
+/src/main/resources/application.properties
