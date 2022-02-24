@@ -9,14 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import personal.finance.app.demo.domain.dto.UserDto;
-import personal.finance.app.demo.domain.entity.Role;
-import personal.finance.app.demo.domain.entity.User;
-import personal.finance.app.demo.repository.RoleRepository;
-import personal.finance.app.demo.repository.UserRepository;
-import personal.finance.app.demo.repository.VerificationTokenRepository;
+import personal.finance.app.demo.domain.entity.user.Role;
+import personal.finance.app.demo.domain.entity.user.User;
+import personal.finance.app.demo.repository.user.RoleRepository;
+import personal.finance.app.demo.repository.user.UserRepository;
+import personal.finance.app.demo.repository.user.VerificationTokenRepository;
 import personal.finance.app.demo.service.exception.RoleNotFoundException;
 import personal.finance.app.demo.service.imp.EmailServiceImp;
-import personal.finance.app.demo.service.imp.LoginServiceImp;
+import personal.finance.app.demo.service.imp.RegistrationServiceImp;
 
 import java.util.Optional;
 
@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-public class LoginServiceTests {
+public class RegistrationServiceTests {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -37,11 +37,11 @@ public class LoginServiceTests {
     @Mock
     private EmailServiceImp emailService;
 
-    private LoginServiceImp loginService;
+    private RegistrationServiceImp registrationService;
 
     @BeforeEach
     void setup() {
-        this.loginService = new LoginServiceImp(userRepository,
+        this.registrationService = new RegistrationServiceImp(userRepository,
                 passwordEncoder, roleRepository,
                 verificationTokenRepository,
                 emailService);
@@ -53,12 +53,12 @@ public class LoginServiceTests {
         @Test
         void should_ReturnAddedUser_When_AddUser() {
             // given
-            when(LoginServiceTests.this.roleRepository.findByName(anyString()))
+            when(RegistrationServiceTests.this.roleRepository.findByName(anyString()))
                     .thenReturn(Optional.of(new Role(1L, "user")));
             User userToRegister = User.builder().username("testUsername")
                     .password("testPassword").email("test@gmail.com").build();
             // when
-            User registeredUser = loginService.addUser(userToRegister);
+            User registeredUser = registrationService.addUser(userToRegister);
             // then
             verify(roleRepository, times(1)).findByName(anyString());
             assertAll(
@@ -75,12 +75,12 @@ public class LoginServiceTests {
         @Test
         void should_ThrowException_When_RoleNotFound() {
             // given
-            when(LoginServiceTests.this.roleRepository.findByName(anyString()))
+            when(RegistrationServiceTests.this.roleRepository.findByName(anyString()))
                     .thenReturn(Optional.empty());
             User userToRegister = User.builder().username("testUsername")
                     .password("testPassword").email("test@gmail.com").build();
             // when
-            Executable executable = () -> loginService.addUser(userToRegister);
+            Executable executable = () -> registrationService.addUser(userToRegister);
             // then
             assertThrows(RoleNotFoundException.class, executable);
         }
@@ -98,7 +98,7 @@ public class LoginServiceTests {
             UserDto testUserDto = new UserDto(expUsername,
                     expPassword, expEmail);
             // when
-            User mappedUser = loginService.mapUser(testUserDto);
+            User mappedUser = registrationService.mapUser(testUserDto);
             // then
             assertAll(
                     () -> assertEquals(expUsername, mappedUser.getUsername()),

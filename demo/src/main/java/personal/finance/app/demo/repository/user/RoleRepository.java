@@ -1,8 +1,8 @@
-package personal.finance.app.demo.repository;
+package personal.finance.app.demo.repository.user;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import personal.finance.app.demo.domain.entity.Role;
+import personal.finance.app.demo.domain.entity.user.Role;
 
 import java.util.Optional;
 

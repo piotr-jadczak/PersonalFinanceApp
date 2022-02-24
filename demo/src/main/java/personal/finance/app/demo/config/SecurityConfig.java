@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import personal.finance.app.demo.repository.UserRepository;
+import personal.finance.app.demo.repository.user.UserRepository;
 import personal.finance.app.demo.service.imp.UserDetailsServiceImp;
 
 @Configuration
@@ -24,7 +24,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
-
         return new BCryptPasswordEncoder(ENCODING_STRENGTH);
     }
 
@@ -60,6 +59,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/confirm-registration/**")
                     .permitAll()
+                .and()
+                .authorizeRequests()
+                .antMatchers("/api/stock/**")
+                .permitAll()
                 .and()
                     .formLogin()
                     .permitAll()

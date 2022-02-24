@@ -1,4 +1,4 @@
-package personal.finance.app.demo.domain.entity;
+package personal.finance.app.demo.domain.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import personal.finance.app.demo.domain.entity.saving.Saving;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -42,8 +43,11 @@ public class User implements UserDetails {
     private boolean accountNonLocked;
     private boolean enabled;
 
-    @OneToOne
+    @ManyToOne
     private Role role;
+
+    @OneToOne
+    private Saving saving;
 
     @Override
     @JsonIgnore

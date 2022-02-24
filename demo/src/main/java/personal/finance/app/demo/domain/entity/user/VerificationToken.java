@@ -1,4 +1,4 @@
-package personal.finance.app.demo.domain.entity;
+package personal.finance.app.demo.domain.entity.user;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class VerificationToken {
 
+    private final static int EXPIRY_DAYS_PERIOD = 3;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,7 +22,7 @@ public class VerificationToken {
     private LocalDate expiryDate;
 
     private LocalDate calculateExpiryDate() {
-        return LocalDate.now().plusDays(3);
+        return LocalDate.now().plusDays(EXPIRY_DAYS_PERIOD);
     }
 
     @OneToOne
