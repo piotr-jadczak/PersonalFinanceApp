@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import personal.finance.app.demo.domain.entity.saving.StockData;
 import personal.finance.app.demo.domain.entity.saving.StockDataBuffer;
-import personal.finance.app.demo.domain.storage.StockUpdateStatus;
+import personal.finance.app.demo.domain.storage.MarketDataUpdateStatus;
 import personal.finance.app.demo.repository.saving.StockDataBufferRepository;
 import personal.finance.app.demo.repository.saving.StockDataRepository;
 import personal.finance.app.demo.service.contract.StockDataService;
@@ -29,14 +29,14 @@ public class StockDataServiceImp implements StockDataService {
     private static final String googleSearchURL = "https://www.google.com/search?q=";
     private static final String webClassWithPrice = "IsqQVc NprOob wT3VGc";
 
-    public StockUpdateStatus updateStatus;
+    public MarketDataUpdateStatus updateStatus;
 
     @Autowired
     public StockDataServiceImp(StockDataBufferRepository bufferRepository,
                                StockDataRepository stockRepository) {
         this.bufferRepository = bufferRepository;
         this.stockRepository = stockRepository;
-        updateStatus = new StockUpdateStatus();
+        updateStatus = new MarketDataUpdateStatus();
     }
 
     @Override

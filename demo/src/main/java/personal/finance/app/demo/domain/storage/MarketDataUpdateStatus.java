@@ -2,12 +2,12 @@ package personal.finance.app.demo.domain.storage;
 
 import lombok.Getter;
 
-public class StockUpdateStatus {
+public class MarketDataUpdateStatus {
 
     @Getter
     private boolean isUpdated;
 
-    public StockUpdateStatus() {
+    public MarketDataUpdateStatus() {
         this.isUpdated = false;
     }
 

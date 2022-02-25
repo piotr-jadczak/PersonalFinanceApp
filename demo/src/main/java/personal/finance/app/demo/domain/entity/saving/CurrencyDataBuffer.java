@@ -16,7 +16,7 @@ import java.time.LocalTime;
 @Entity
 @Data
 @NoArgsConstructor
-public class CurrencyData {
+public class CurrencyDataBuffer {
 
     @JsonIgnore
     @Id
@@ -35,15 +35,15 @@ public class CurrencyData {
     @NotNull
     private LocalTime fetchTime;
 
-    public CurrencyData(String currencyName, String symbol) {
+    @JsonIgnore
+    @NotBlank
+    private String searchQuote;
+
+    public CurrencyDataBuffer(String currencyName, String symbol, String searchQuote) {
         this.currencyName = currencyName;
         this.symbol = symbol;
+        this.searchQuote = searchQuote;
         this.currentPrice = 0.0;
         this.fetchTime = LocalTime.of(12, 0);
-    }
-
-    public void updateCurrencyData(CurrencyDataBuffer buffer) {
-        this.currentPrice = buffer.getCurrentPrice();
-        this.fetchTime = buffer.getFetchTime();
     }
 }

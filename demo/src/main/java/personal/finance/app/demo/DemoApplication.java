@@ -6,8 +6,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import personal.finance.app.demo.domain.entity.user.Role;
+import personal.finance.app.demo.domain.storage.CurrencyDataInputReader;
 import personal.finance.app.demo.domain.storage.StockDataInputReader;
 import personal.finance.app.demo.repository.user.RoleRepository;
+import personal.finance.app.demo.service.contract.CurrencyDataService;
 import personal.finance.app.demo.service.contract.StockDataService;
 
 import javax.swing.*;
@@ -22,16 +24,23 @@ public class DemoApplication {
 	@Bean
 	@Autowired
 	public CommandLineRunner setupApp(RoleRepository roleRepository,
-									  StockDataInputReader reader,
-									  StockDataService stockDataService) {
+									  StockDataInputReader stockReader,
+									  StockDataService stockDataService,
+									  CurrencyDataInputReader currencyReader,
+									  CurrencyDataService currencyDataService) {
 		return args -> {
 			roleRepository.save(new Role("user"));
 			roleRepository.save(new Role("admin"));
-			reader.initialSetUp();
+			stockReader.initialSetUp();
 			stockDataService.updateStocksBufferPrices();
 			stockDataService.copyStockDataFromBuffer();
 			Timer timer = new Timer(150000, stockDataService);
 			timer.start();
+			currencyReader.initialSetUp();
+			currencyDataService.updateCurrencyDataBufferPrices();
+			currencyDataService.copyCurrencyDataFromBuffer();
+			Timer timer2 = new Timer(150000, currencyDataService);
+			timer2.start();
 
 		};
 	}
