@@ -26,6 +26,7 @@ public class CurrencyDataServiceImp implements CurrencyDataService {
 
     private static final String googleSearchURL = "https://www.google.com/search?q=";
     private static final String webClassWithPrice = "DFlfde SwHCTb";
+    private static final String webClassWithCryptoPrice = "pclqee";
 
     public MarketDataUpdateStatus updateStatus;
 
@@ -88,9 +89,17 @@ public class CurrencyDataServiceImp implements CurrencyDataService {
 
     private void updateCurrencyInfo(CurrencyDataBuffer currency) throws IOException {
         Document doc = Jsoup.connect(googleSearchURL + currency.getSearchQuote()).get();
-        Element stockPriceContent = doc.getElementsByClass(webClassWithPrice).get(0);
+        Element stockPriceContent;
+        if(currency.getSymbol().equals("BTC") ||
+            currency.getSymbol().equals("ETH")) {
+            stockPriceContent = doc.getElementsByClass(webClassWithCryptoPrice).get(0);
+        }
+        else {
+            stockPriceContent = doc.getElementsByClass(webClassWithPrice).get(0);
+        }
         double stockPrice = Double.parseDouble(stockPriceContent.text().
-                replace(',','.').replaceAll(" ",""));
+                replace(',','.').replaceAll(" ","")
+                .replaceAll("&nbsp;", ""));
         int hour = LocalTime.now().getHour();
         int minutes = LocalTime.now().getMinute();
         currency.setCurrentPrice(stockPrice);
