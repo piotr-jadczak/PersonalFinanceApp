@@ -17,6 +17,8 @@ import javax.swing.*;
 @SpringBootApplication
 public class DemoApplication {
 
+	private final int REFRESH_PERIOD = 1000 * 60 * 15; // 15 minutes
+
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 	}
@@ -34,12 +36,12 @@ public class DemoApplication {
 			stockReader.initialSetUp();
 			stockDataService.updateStocksBufferPrices();
 			stockDataService.copyStockDataFromBuffer();
-			Timer timer = new Timer(150000, stockDataService);
+			Timer timer = new Timer(REFRESH_PERIOD, stockDataService);
 			timer.start();
 			currencyReader.initialSetUp();
 			currencyDataService.updateCurrencyDataBufferPrices();
 			currencyDataService.copyCurrencyDataFromBuffer();
-			Timer timer2 = new Timer(150000, currencyDataService);
+			Timer timer2 = new Timer(REFRESH_PERIOD, currencyDataService);
 			timer2.start();
 
 		};

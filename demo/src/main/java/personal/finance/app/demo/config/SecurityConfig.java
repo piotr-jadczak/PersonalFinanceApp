@@ -29,6 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public UserDetailsServiceImp userDetailsService() {
+
         return new UserDetailsServiceImp(userRepository);
     }
 
@@ -53,22 +54,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-                    .antMatchers("/api/register/**")
+                    .antMatchers("/resources/**")
                     .permitAll()
                 .and()
                 .authorizeRequests()
-                    .antMatchers("/confirm-registration/**")
+                    .antMatchers("/api/register/**","/confirm-registration/**",
+                            "/api/stock/**", "/api/currency/**")
                     .permitAll()
                 .and()
-                .authorizeRequests()
-                    .antMatchers("/api/stock/**")
+                .formLogin()
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/success_login")
                     .permitAll()
                 .and()
-                    .authorizeRequests()
-                    .antMatchers("/api/currency/**")
-                    .permitAll()
-                .and()
-                    .formLogin()
+                .logout()
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/")
                     .permitAll()
                 .and()
                 .httpBasic();

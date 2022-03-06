@@ -23,10 +23,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security:2.6.3'
 	implementation 'org.springframework.boot:spring-boot-starter-web:2.6.3'
 	implementation 'org.springframework.boot:spring-boot-starter-validation:2.6.3'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation group: 'org.hsqldb', name: 'hsqldb', version: '2.6.1'
 	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.6.3'
 	implementation group: 'org.jsoup', name: 'jsoup', version: '1.14.3'
+	// https://mvnrepository.com/artifact/com.github.eirslett/frontend-maven-plugin
+	implementation group: 'com.github.eirslett', name: 'frontend-maven-plugin', version: '1.12.1'
 	compileOnly 'org.projectlombok:lombok:1.18.22'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools:2.6.3'
 	annotationProcessor 'org.projectlombok:lombok:1.18.22'
