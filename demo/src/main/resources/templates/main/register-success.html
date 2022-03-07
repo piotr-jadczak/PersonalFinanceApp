@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Register success</title>
+    <th:block th:replace="main/fragments-db :: headResources"></th:block>
+</head>
+<body class="bg-light">
+
+<div class="container bg-white">
+    <div class="row h-100 mt-5 justify-content-center align-items-center">
+        <div class="text-center">
+            <img th:src="@{/images/success-symbol.jpg}" width="100px"><br/>
+            <p class="text-success">You have successfully created an account!</p>
+            <p>Activate your account by clicking on the link<br/> sent on your email to finish the registration process.</p>
+            <a class="text-primary" th:href="@{/}">Home</a>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="main/fragments-db :: jsBootstrapResources"></th:block>
+</body>
+</html>

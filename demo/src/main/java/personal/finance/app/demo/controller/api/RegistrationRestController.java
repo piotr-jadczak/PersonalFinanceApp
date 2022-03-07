@@ -16,8 +16,8 @@ public class RegistrationRestController {
     private final RegistrationService registrationService;
 
     @Autowired
-    public RegistrationRestController(RegistrationService loginService) {
-        this.registrationService = loginService;
+    public RegistrationRestController(RegistrationService registrationService) {
+        this.registrationService = registrationService;
     }
 
     @PostMapping("/api/register")
