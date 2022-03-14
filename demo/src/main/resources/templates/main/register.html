@@ -10,7 +10,7 @@
     <div class="row h-100 mt-5 justify-content-center align-items-center">
         <form class="form-signin" style="min-width: 350px;" th:action="@{/register}" th:object="${userDto}" method="post">
             <div class="text-center">
-                <img class="mb-4" th:src="@{/images/dolar.svg}" width="72" height="72">
+                <img class="mb-4" th:src="@{/images/dolar-icon.jpg}" width="72" height="72">
                 <h1 class="h3 mb-3 font-weight-normal">Register</h1>
             </div>
             <div th:if="${formErrors}" class="alert alert-error text-center">
@@ -37,6 +37,5 @@
     </div>
 </div>
 
-<th:block th:replace="main/fragments-db :: jsBootstrapResources"></th:block>
 </body>
 </html>
