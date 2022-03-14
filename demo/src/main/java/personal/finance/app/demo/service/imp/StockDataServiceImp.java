@@ -44,12 +44,7 @@ public class StockDataServiceImp implements StockDataService {
 
         Iterable<StockDataBuffer> bufferStocks = bufferRepository.findAll();
         for(StockDataBuffer stock : bufferStocks) {
-            try {
-                updateStockInfo(stock);
-            }
-            catch (IOException e) {
-                throw new RuntimeException("Cannot search stock", e);
-            }
+            updateStockInfo(stock);
         }
         bufferRepository.saveAll(bufferStocks);
     }
@@ -78,11 +73,19 @@ public class StockDataServiceImp implements StockDataService {
         stockRepository.saveAll(stockData);
     }
 
-    private void updateStockInfo(StockDataBuffer stock) throws IOException {
-        Document doc = Jsoup.connect(googleSearchURL + stock.getSearchQuote()).get();
-        Element stockPriceContent = doc.getElementsByClass(webClassWithPrice).get(0);
-        double stockPrice = Double.parseDouble(stockPriceContent.text().
-                replace(',','.').replaceAll(" ",""));
+    private void updateStockInfo(StockDataBuffer stock) {
+
+        double stockPrice = 0;
+        try {
+            Document doc = Jsoup.connect(googleSearchURL + stock.getSearchQuote()).get();
+            Element stockPriceContent = doc.getElementsByClass(webClassWithPrice).get(0);
+            stockPrice = Double.parseDouble(stockPriceContent.text().
+                    replace(',','.').replaceAll(" ",""));
+        }
+        catch (IOException e) {
+            System.out.println("Error fetching stock " + stock.getCompanyName());
+        }
+
         int hour = LocalTime.now().getHour();
         int minutes = LocalTime.now().getMinute();
         stock.setCurrentPrice(stockPrice);

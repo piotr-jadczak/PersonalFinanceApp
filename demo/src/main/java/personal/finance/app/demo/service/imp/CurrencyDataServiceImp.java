@@ -43,12 +43,7 @@ public class CurrencyDataServiceImp implements CurrencyDataService {
 
         Iterable<CurrencyDataBuffer> bufferCurrencies = bufferRepository.findAll();
         for(CurrencyDataBuffer currency : bufferCurrencies) {
-            try {
-                updateCurrencyInfo(currency);
-            }
-            catch (IOException e) {
-                throw new RuntimeException("Cannot search stock", e);
-            }
+            updateCurrencyInfo(currency);
         }
         bufferRepository.saveAll(bufferCurrencies);
     }
@@ -87,19 +82,27 @@ public class CurrencyDataServiceImp implements CurrencyDataService {
         }
     }
 
-    private void updateCurrencyInfo(CurrencyDataBuffer currency) throws IOException {
-        Document doc = Jsoup.connect(googleSearchURL + currency.getSearchQuote()).get();
-        Element stockPriceContent;
-        if(currency.getSymbol().equals("BTC") ||
-            currency.getSymbol().equals("ETH")) {
-            stockPriceContent = doc.getElementsByClass(webClassWithCryptoPrice).get(0);
+    private void updateCurrencyInfo(CurrencyDataBuffer currency) {
+
+        double stockPrice = 0;
+        try {
+            Document doc = Jsoup.connect(googleSearchURL + currency.getSearchQuote()).get();
+            Element stockPriceContent;
+            if(currency.getSymbol().equals("BTC") ||
+                    currency.getSymbol().equals("ETH")) {
+                stockPriceContent = doc.getElementsByClass(webClassWithCryptoPrice).get(0);
+            }
+            else {
+                stockPriceContent = doc.getElementsByClass(webClassWithPrice).get(0);
+            }
+            stockPrice = Double.parseDouble(stockPriceContent.text().
+                    replace(',','.').replaceAll(" ","")
+                    .replaceAll("&nbsp;", ""));
         }
-        else {
-            stockPriceContent = doc.getElementsByClass(webClassWithPrice).get(0);
+        catch (IOException e) {
+            System.out.println("Error fetching currency " + currency.getCurrencyName());
         }
-        double stockPrice = Double.parseDouble(stockPriceContent.text().
-                replace(',','.').replaceAll(" ","")
-                .replaceAll("&nbsp;", ""));
+
         int hour = LocalTime.now().getHour();
         int minutes = LocalTime.now().getMinute();
         currency.setCurrentPrice(stockPrice);
